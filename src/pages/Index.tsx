@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Layout from '@/components/Layout';
 import JoinTeamButton from '@/components/JoinTeamButton';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const Index = () => {
   const [copiedBibtex, setCopiedBibtex] = useState<string | null>(null);
@@ -72,6 +73,18 @@ const Index = () => {
       coAdvised: "Prof. Robert Kim",
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
       slug: "james-chen"
+    },
+    {
+      name: "Sophie Williams",
+      position: "PhD Student",
+      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+      slug: "sophie-williams"
+    },
+    {
+      name: "Dr. David Rodriguez",
+      position: "Research Scientist",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+      slug: "david-rodriguez"
     }
   ];
 
@@ -218,34 +231,26 @@ const Index = () => {
       {/* Meet the Team */}
       <section className="section-gradient py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center mb-12">
+          <div className="mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-secondary">Meet the Team</h2>
-            <Link to="/team">
-              <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
-                See All
-              </Button>
-            </Link>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
             {teamMembers.map((member, index) => (
-              <Link key={index} to={`/team/${member.slug}`}>
-                <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105">
-                  <CardContent className="p-6">
-                    <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
-                      <img
-                        src={member.image}
-                        alt={member.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <h3 className="font-semibold text-secondary mb-1">{member.name}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{member.position}</p>
-                    {member.coAdvised && (
-                      <p className="text-xs text-gray-500">Co-advised with: {member.coAdvised}</p>
-                    )}
-                  </CardContent>
-                </Card>
+              <Link key={index} to={`/team/${member.slug}`} className="group">
+                <div className="flex flex-col items-center text-center">
+                  <Avatar className="w-24 h-24 border-2 border-primary/20 group-hover:border-primary transition-all duration-300 mb-3">
+                    <AvatarImage src={member.image} alt={member.name} />
+                    <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                  </Avatar>
+                  <h3 className="font-medium text-secondary group-hover:text-primary transition-colors text-sm sm:text-base">
+                    {member.name}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1">{member.position}</p>
+                  {member.coAdvised && (
+                    <p className="text-xs text-gray-500 mt-1">Co-advised with: {member.coAdvised}</p>
+                  )}
+                </div>
               </Link>
             ))}
           </div>
