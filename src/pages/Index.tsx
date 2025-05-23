@@ -42,37 +42,61 @@ const Index = () => {
       <JoinTeamButton />
       
       {/* Hero Section */}
-      <section className="hero-gradient min-h-screen flex items-center justify-center relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Welcome to <span className="text-primary-foreground">Dormant Neurons</span>
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 leading-relaxed opacity-90">
-              We ensure that AI makes fair, clear, and safe decisions that people can rely on and trust.
-            </p>
-            <p className="text-lg mb-12 opacity-80">
-              Our home is the CISPA Helmholtz Center for Information Security in Saarbrücken, Germany
-            </p>
-            
-            {/* Group Photo */}
-            <div className="max-w-2xl mx-auto mb-6">
-              <img
-                src="team/team.jpg"
-                alt="Dormant Neurons Research Group"
-                className="rounded-lg shadow-2xl w-full h-auto"
-              />
+      <section className="min-h-screen flex items-center relative overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-gradient-to-r from-secondary/90 to-primary/50 -z-10"
+          aria-hidden="true"
+        ></div>
+        <div 
+          className="absolute inset-0 bg-[url('/pattern-bg.png')] bg-repeat opacity-10 -z-10"
+          aria-hidden="true"
+        ></div>
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Left side - Text */}
+            <div className="text-white">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight animate-fade-in">
+                Welcome to <span className="text-primary-foreground logo-flicker">Dormant Neurons</span>
+              </h1>
+              <p className="text-xl md:text-2xl mb-8 leading-relaxed opacity-90 animate-fade-in" style={{ animationDelay: "200ms" }}>
+                We ensure that AI makes fair, clear, and safe decisions that people can rely on and trust.
+              </p>
+              <p className="text-lg mb-6 opacity-80 animate-fade-in" style={{ animationDelay: "400ms" }}>
+                Our home is the CISPA Helmholtz Center for Information Security in Saarbrücken, Germany
+              </p>
+              
+              <Button 
+                onClick={scrollToContent} 
+                variant="outline" 
+                className="border-white text-white hover:bg-white hover:text-secondary mt-4 animate-fade-in"
+                style={{ animationDelay: "600ms" }}
+              >
+                <ArrowDown className="mr-2 h-4 w-4" /> Explore Our Work
+              </Button>
             </div>
-            <p className="text-sm opacity-70 italic">
-              Dormant Neurons as last seen in June 2024
-            </p>
+            
+            {/* Right side - Image */}
+            <div className="relative animate-fade-in" style={{ animationDelay: "300ms" }}>
+              <div className="rounded-lg overflow-hidden shadow-2xl border-4 border-white/20 transition-transform hover:scale-[1.01] duration-300">
+                <img
+                  src="team/team.jpg"
+                  alt="Dormant Neurons Research Group"
+                  className="w-full h-auto"
+                />
+              </div>
+              <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-secondary/80 backdrop-blur-sm px-6 py-2 rounded-full text-white text-sm">
+                Dormant Neurons as last seen in June 2024
+              </div>
+            </div>
           </div>
         </div>
         
-        {/* Scroll indicator */}
+        {/* Scroll indicator - now at bottom center */}
         <button
           onClick={scrollToContent}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce hidden md:block"
+          aria-label="Scroll to content"
         >
           <ArrowDown className="h-8 w-8" />
         </button>

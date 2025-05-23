@@ -1,3 +1,4 @@
+
 @keyframes flicker {
   0% { opacity: 1; }
   5% { opacity: 0.8; }
@@ -24,4 +25,15 @@
 
 .logo-flicker:hover {
   animation: flicker 2s infinite alternate;
-} 
+}
+
+/* New fade-in animation for hero elements */
+@keyframes fade-in {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+  opacity: 0;
+}
