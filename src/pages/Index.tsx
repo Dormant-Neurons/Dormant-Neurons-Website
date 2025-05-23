@@ -13,7 +13,7 @@ import { publications } from '@/data/publications';
 
 const Index = () => {
   const [copiedBibtex, setCopiedBibtex] = useState<string | null>(null);
-  
+
   const copyBibtex = (bibtex: string, title: string) => {
     navigator.clipboard.writeText(bibtex);
     setCopiedBibtex(title);
@@ -69,7 +69,7 @@ const Index = () => {
               <Button 
                 onClick={scrollToContent} 
                 variant="outline" 
-                className="border-white text-white hover:bg-white hover:text-secondary mt-4 animate-fade-in"
+                className="border-white text-black hover:bg-white hover:text-secondary mt-4 animate-fade-in"
                 style={{ animationDelay: "600ms" }}
               >
                 <ArrowDown className="mr-2 h-4 w-4" /> Explore Our Work
