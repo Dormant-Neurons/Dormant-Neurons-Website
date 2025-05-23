@@ -95,7 +95,7 @@ const Contact = () => {
                 <CardContent>
                   <div className="aspect-video rounded-lg overflow-hidden">
                     <iframe
-                      src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=cispa helmholt&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                      src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=cispa helmholtz stu&t=&z=15&ie=UTF8&iwloc=B&output=embed"
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
