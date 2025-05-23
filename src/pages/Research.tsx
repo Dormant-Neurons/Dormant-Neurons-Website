@@ -1,45 +1,9 @@
-
 import Layout from '@/components/Layout';
 import JoinTeamButton from '@/components/JoinTeamButton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { researchAreas } from '@/data/researchAreas';
 
 const Research = () => {
-  const researchAreas = [
-    {
-      title: "Fairness in AI",
-      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=600&h=400&fit=crop",
-      description: "We develop cutting-edge methods to ensure AI systems make unbiased decisions across different demographics and use cases. Our research focuses on algorithmic fairness, bias detection, and mitigation strategies in machine learning models.",
-      keyAreas: [
-        "Algorithmic bias detection and mitigation",
-        "Fair representation learning",
-        "Demographic parity and equalized odds",
-        "Fairness in recommender systems"
-      ]
-    },
-    {
-      title: "Explainable AI",
-      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=400&fit=crop",
-      description: "Creating transparent AI models that provide clear explanations for their decision-making processes. We work on interpretability methods that help users understand how AI systems arrive at their conclusions.",
-      keyAreas: [
-        "Local and global interpretability methods",
-        "Feature importance analysis",
-        "Counterfactual explanations",
-        "Human-AI interaction in explanation"
-      ]
-    },
-    {
-      title: "AI Safety",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop",
-      description: "Building robust AI systems that operate safely and reliably in real-world environments. Our focus is on developing methods to ensure AI systems remain safe even under adversarial conditions or distribution shifts.",
-      keyAreas: [
-        "Adversarial robustness",
-        "Out-of-distribution detection",
-        "Safe reinforcement learning",
-        "AI alignment and value learning"
-      ]
-    }
-  ];
-
   return (
     <Layout>
       <JoinTeamButton />
@@ -47,11 +11,11 @@ const Research = () => {
       <div className="py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="text-center mb-16">
+          <div className="mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
               Our Research
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 leading-relaxed">
               We are dedicated to advancing the frontiers of trustworthy AI through rigorous research 
               in fairness, explainability, and safety. Our interdisciplinary approach combines theoretical 
               foundations with practical applications.
@@ -59,14 +23,14 @@ const Research = () => {
           </div>
 
           {/* Research Areas */}
-          <div className="space-y-16">
+          <div className="space-y-24">
             {researchAreas.map((area, index) => (
               <div key={index} className={`flex flex-col ${index % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 lg:gap-12 items-center`}>
                 <div className="lg:w-1/2">
                   <img
                     src={area.image}
                     alt={area.title}
-                    className="w-full h-80 object-cover rounded-lg shadow-lg"
+                    className="w-full h-80 object-contain rounded-lg shadow-lg"
                   />
                 </div>
                 <div className="lg:w-1/2 space-y-6">
@@ -79,7 +43,7 @@ const Research = () => {
                   <div>
                     <h3 className="text-xl font-semibold text-secondary mb-4">Key Research Areas:</h3>
                     <ul className="space-y-2">
-                      {area.keyAreas.map((keyArea, keyIndex) => (
+                      {area.details.map((keyArea, keyIndex) => (
                         <li key={keyIndex} className="flex items-start">
                           <span className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
                           <span className="text-gray-600">{keyArea}</span>

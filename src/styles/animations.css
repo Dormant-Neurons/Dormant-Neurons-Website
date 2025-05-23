@@ -1,0 +1,27 @@
+@keyframes flicker {
+  0% { opacity: 1; }
+  5% { opacity: 0.8; }
+  10% { opacity: 1; }
+  15% { opacity: 0.8; }
+  20% { opacity: 1; }
+  25% { opacity: 0.8; }
+  30% { opacity: 1; }
+  35% { opacity: 0.8; }
+  40% { opacity: 1; }
+  45% { opacity: 0.8; }
+  50% { opacity: 1; }
+  55% { opacity: 0.8; }
+  60% { opacity: 1; }
+  65% { opacity: 0.8; }
+  70% { opacity: 1; }
+  75% { opacity: 0.8; }
+  80% { opacity: 1; }
+  85% { opacity: 0.8; }
+  90% { opacity: 1; }
+  95% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+.logo-flicker:hover {
+  animation: flicker 2s infinite alternate;
+} 

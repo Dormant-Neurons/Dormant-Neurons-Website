@@ -22,15 +22,18 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
+          {/* <Link to="/" className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">DN</span>
             </div>
             <span className="text-xl font-bold text-secondary hidden sm:block">
               Dormant Neurons
             </span>
+          </Link> */}
+          <Link to="/" className="inline-block h-full logo-flicker">
+                <img src="/logo/logo-dark-wo-bg.png" alt="Dormant Neurons Logo" className="h-full w-auto" />
           </Link>
 
           {/* Desktop Navigation */}

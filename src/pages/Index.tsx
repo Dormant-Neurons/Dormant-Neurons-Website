@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDown, ChevronDown, Copy, ExternalLink } from 'lucide-react';
@@ -7,108 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Layout from '@/components/Layout';
 import JoinTeamButton from '@/components/JoinTeamButton';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { teamMembers } from '@/data/teamMembers';
+import { news } from '@/data/news';
+import { researchAreas } from '@/data/researchAreas';
+import { publications } from '@/data/publications';
 
 const Index = () => {
   const [copiedBibtex, setCopiedBibtex] = useState<string | null>(null);
-
-  const researchAreas = [
-    {
-      title: "Fairness in AI",
-      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400&h=300&fit=crop",
-      description: "Developing methods to ensure AI systems make unbiased decisions across different demographics and use cases."
-    },
-    {
-      title: "Explainable AI",
-      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop",
-      description: "Creating transparent AI models that provide clear explanations for their decision-making processes."
-    },
-    {
-      title: "AI Safety",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=300&fit=crop",
-      description: "Building robust AI systems that operate safely and reliably in real-world environments."
-    }
-  ];
-
-  const latestNews = [
-    {
-      date: "2025-01-15",
-      title: "New Paper Accepted at ICML 2025",
-      description: "Our work on interpretable neural networks has been accepted for publication."
-    },
-    {
-      date: "2025-01-10",
-      title: "Dr. Schönherr Receives Best Paper Award",
-      description: "Recognition for outstanding contribution to AI fairness research."
-    },
-    {
-      date: "2025-01-05",
-      title: "Collaboration with Industry Partners",
-      description: "Announcing new partnerships to advance AI safety in production systems."
-    }
-  ];
-
-  const teamMembers = [
-    {
-      name: "Dr. Lea Schönherr",
-      position: "Group Leader",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      slug: "lea-schoenherr"
-    },
-    {
-      name: "Dr. Alex Mueller",
-      position: "Senior Researcher",
-      coAdvised: "Prof. Sarah Johnson",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      slug: "alex-mueller"
-    },
-    {
-      name: "Maria Santos",
-      position: "PhD Student",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-      slug: "maria-santos"
-    },
-    {
-      name: "Dr. James Chen",
-      position: "Postdoc",
-      coAdvised: "Prof. Robert Kim",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-      slug: "james-chen"
-    },
-    {
-      name: "Sophie Williams",
-      position: "PhD Student",
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
-      slug: "sophie-williams"
-    },
-    {
-      name: "Dr. David Rodriguez",
-      position: "Research Scientist",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
-      slug: "david-rodriguez"
-    }
-  ];
-
-  const publications = [
-    {
-      date: "2025",
-      title: "Towards Interpretable Neural Networks: A Comprehensive Framework",
-      authors: "Schönherr, L. et al.",
-      venue: "ICML 2025",
-      link: "#",
-      bibtex: "@inproceedings{schoenherr2025interpretable,\n  title={Towards Interpretable Neural Networks: A Comprehensive Framework},\n  author={Schönherr, Lea and others},\n  booktitle={ICML},\n  year={2025}\n}",
-      slug: "interpretable-neural-networks-2025"
-    },
-    {
-      date: "2024",
-      title: "Fairness-Aware Deep Learning: Methods and Applications",
-      authors: "Mueller, A. et al.",
-      venue: "NeurIPS 2024",
-      link: "#",
-      bibtex: "@inproceedings{mueller2024fairness,\n  title={Fairness-Aware Deep Learning: Methods and Applications},\n  author={Mueller, Alex and others},\n  booktitle={NeurIPS},\n  year={2024}\n}",
-      slug: "fairness-aware-deep-learning-2024"
-    }
-  ];
-
+  
   const copyBibtex = (bibtex: string, title: string) => {
     navigator.clipboard.writeText(bibtex);
     setCopiedBibtex(title);
@@ -118,6 +23,19 @@ const Index = () => {
   const scrollToContent = () => {
     window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
   };
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  // Get the 3 most recent news items
+  const latestNews = [...news]
+    .sort((a, b) => b.date.getTime() - a.date.getTime())
+    .slice(0, 3);
 
   return (
     <Layout>
@@ -140,13 +58,13 @@ const Index = () => {
             {/* Group Photo */}
             <div className="max-w-2xl mx-auto mb-6">
               <img
-                src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=500&fit=crop"
+                src="team/team.jpg"
                 alt="Dormant Neurons Research Group"
                 className="rounded-lg shadow-2xl w-full h-auto"
               />
             </div>
             <p className="text-sm opacity-70 italic">
-              Dormant Neurons as last seen in May 2025
+              Dormant Neurons as last seen in June 2024
             </p>
           </div>
         </div>
@@ -179,7 +97,7 @@ const Index = () => {
                   <img
                     src={area.image}
                     alt={area.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
                   />
                 </div>
                 <CardHeader>
@@ -207,18 +125,21 @@ const Index = () => {
           </div>
           
           <div className="space-y-6">
-            {latestNews.slice(0, 3).map((news, index) => (
+            {latestNews.map((item, index) => (
               <Card key={index} className="hover:shadow-md transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex flex-col md:flex-row md:items-center justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-4 mb-2">
                         <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                          {news.date}
+                          {formatDate(item.date)}
                         </span>
                       </div>
-                      <h3 className="text-xl font-semibold text-secondary mb-2">{news.title}</h3>
-                      <p className="text-gray-600">{news.description}</p>
+                      <h3 className="text-xl font-semibold text-secondary mb-2">{item.title}</h3>
+                      <div 
+                        className="text-gray-600"
+                        dangerouslySetInnerHTML={{ __html: item.description }}
+                      />
                     </div>
                   </div>
                 </CardContent>
@@ -235,11 +156,11 @@ const Index = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-secondary">Meet the Team</h2>
           </div>
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
             {teamMembers.map((member, index) => (
               <Link key={index} to={`/team/${member.slug}`} className="group">
                 <div className="flex flex-col items-center text-center">
-                  <Avatar className="w-24 h-24 border-2 border-primary/20 group-hover:border-primary transition-all duration-300 mb-3">
+                  <Avatar className="w-32 h-32 border-2 border-primary/20 group-hover:border-primary transition-all duration-300 mb-4">
                     <AvatarImage src={member.image} alt={member.name} />
                     <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                   </Avatar>
@@ -248,7 +169,7 @@ const Index = () => {
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-600 mt-1">{member.position}</p>
                   {member.coAdvised && (
-                    <p className="text-xs text-gray-500 mt-1">Co-advised with: {member.coAdvised}</p>
+                    <p className="text-xs text-gray-500 mt-1">{member.coAdvised}</p>
                   )}
                 </div>
               </Link>
@@ -261,7 +182,7 @@ const Index = () => {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-secondary">Publications</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-secondary">Recent Publications</h2>
             <Link to="/publications">
               <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
                 See All
@@ -270,14 +191,17 @@ const Index = () => {
           </div>
           
           <div className="space-y-6">
-            {publications.map((pub, index) => (
+            {[...publications]
+              .sort((a, b) => b.date.getTime() - a.date.getTime())
+              .slice(0, 3)
+              .map((pub, index) => (
               <Card key={index} className="hover:shadow-md transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between">
                     <div className="flex-1 mb-4 lg:mb-0">
                       <div className="flex items-center space-x-4 mb-2">
                         <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                          {pub.date}
+                          {formatDate(pub.date)}
                         </span>
                         <span className="text-sm text-primary font-medium">{pub.venue}</span>
                       </div>
@@ -286,12 +210,14 @@ const Index = () => {
                           {pub.title}
                         </h3>
                       </Link>
-                      <p className="text-gray-600 mb-2">{pub.authors}</p>
+                      <p className="text-gray-600 mb-2">{pub.shortAuthors}</p>
                     </div>
                     <div className="flex space-x-2">
-                      <Button variant="outline" size="sm">
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Paper
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={pub.paperLink} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="h-4 w-4 mr-2" />
+                          Paper
+                        </a>
                       </Button>
                       <Button
                         variant="outline"

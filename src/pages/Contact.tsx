@@ -13,11 +13,11 @@ const Contact = () => {
       <div className="py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="text-center mb-16">
+          <div className="mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
               Contact Us
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600  leading-relaxed">
               Get in touch with our research group. We welcome collaborations, 
               questions about our work, and inquiries about joining our team.
             </p>
@@ -84,16 +84,18 @@ const Contact = () => {
               </Card>
             </div>
 
+            
+
             {/* Map */}
             <div>
-              <Card className="h-full">
+              <Card className="">
                 <CardHeader>
                   <CardTitle className="text-2xl text-secondary">Location</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="aspect-video rounded-lg overflow-hidden">
                     <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2592.7962687655827!2d6.996285315935678!3d49.41422487934398!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4795b6b8c6b3f5af%3A0x2c8c5c5b5e5d5c5c!2sCISPA%20Helmholtz%20Center%20for%20Information%20Security!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus"
+                      src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=cispa helmholt&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
@@ -103,13 +105,13 @@ const Contact = () => {
                       title="CISPA Location"
                     ></iframe>
                   </div>
-                  <div className="mt-4 text-sm text-gray-600">
+                  {/* <div className="mt-4 text-sm text-gray-600">
                     <p>
                       CISPA is located in Saarbrücken, Germany, on the campus of 
                       Saarland University. The center is easily accessible by public 
                       transportation and car.
                     </p>
-                  </div>
+                  </div> */}
                 </CardContent>
               </Card>
             </div>
@@ -121,3 +123,5 @@ const Contact = () => {
 };
 
 export default Contact;
+
+

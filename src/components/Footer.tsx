@@ -1,6 +1,6 @@
-
 import { Link } from 'react-router-dom';
 import { Mail, MapPin, ExternalLink } from 'lucide-react';
+import '@/styles/animations.css';
 
 const Footer = () => {
   return (
@@ -8,16 +8,17 @@ const Footer = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo and Description */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">DN</span>
-              </div>
-              <span className="text-xl font-bold">Dormant Neurons</span>
+          <div>
+            <div className="h-28 flex items-center">
+              <Link to="/" className="inline-block h-full logo-flicker">
+                <img src="/logo/logo-dark-wo-bg.png" alt="Dormant Neurons Logo" className="h-full w-auto" />
+              </Link>
             </div>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              Ensuring that AI makes fair, clear, and safe decisions that people can rely on and trust.
-            </p>
+            {/* <div className="space-y-4 mt-4">
+              <p className="text-gray-300 text-sm leading-relaxed">
+                Ensuring that AI makes fair, clear, and safe decisions that people can rely on and trust.
+              </p>
+            </div> */}
           </div>
 
           {/* Quick Links */}
@@ -65,7 +66,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-600 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2025 Dormant Neurons Research Group. All rights reserved.</p>
+          <p>&copy; 2025 Dormant Neurons. All rights reserved.</p>
         </div>
       </div>
     </footer>
