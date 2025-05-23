@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDown, ChevronDown, Copy, ExternalLink } from 'lucide-react';
@@ -64,7 +63,7 @@ const Index = () => {
                 We ensure that AI makes fair, clear, and safe decisions that people can rely on and trust.
               </p>
               <p className="text-lg mb-6 opacity-80 animate-fade-in" style={{ animationDelay: "400ms" }}>
-                Our home is the CISPA Helmholtz Center for Information Security in Saarbrücken, Germany
+                Our home is the <a href="https://cispa.de/en" target="_blank" rel="noopener noreferrer" className="text-primary-foreground italic hover:underline">CISPA Helmholtz Center for Information Security</a> in Saarbrücken, Germany
               </p>
               
               <Button 
