@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDown, ChevronDown, Copy, ExternalLink } from 'lucide-react';
@@ -85,9 +86,9 @@ const Index = () => {
                   className="w-full h-auto"
                 />
               </div>
-              <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-secondary/80 backdrop-blur-sm px-6 py-2 rounded-full text-white text-sm">
+              <p className="text-white italic text-sm mt-4 text-center">
                 Dormant Neurons as last seen in June 2024
-              </div>
+              </p>
             </div>
           </div>
         </div>
