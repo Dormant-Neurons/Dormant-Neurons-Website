@@ -70,8 +70,8 @@ const Publications = () => {
                 <CardContent className="p-8">
                   <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
                     <div className="flex-1">
-                      <div className="flex items-center space-x-4 mb-3">
-                        <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                      <div className="flex flex-wrap items-center gap-2 mb-3">
+                        <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full whitespace-nowrap">
                           {formatDate(pub.date)}
                         </span>
                         <span className="text-sm text-primary font-medium">{pub.venue}</span>

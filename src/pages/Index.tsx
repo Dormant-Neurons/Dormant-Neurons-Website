@@ -159,7 +159,17 @@ const Index = () => {
                           {formatDate(item.date)}
                         </span>
                       </div>
-                      <h3 className="text-xl font-semibold text-secondary mb-2">{item.title}</h3>
+                      {item.link ? (
+                        <Link to={item.link} target="_blank" rel="noopener noreferrer">
+                          <h3 className="text-xl font-semibold text-secondary mb-2 hover:text-primary transition-colors">
+                            {item.title}
+                          </h3>
+                        </Link>
+                      ) : (
+                        <h3 className="text-xl font-semibold text-secondary mb-2">
+                          {item.title}
+                        </h3>
+                      )}
                       <div 
                         className="text-gray-600"
                         dangerouslySetInnerHTML={{ __html: item.description }}
@@ -223,8 +233,8 @@ const Index = () => {
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between">
                     <div className="flex-1 mb-4 lg:mb-0">
-                      <div className="flex items-center space-x-4 mb-2">
-                        <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                        <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full whitespace-nowrap">
                           {formatDate(pub.date)}
                         </span>
                         <span className="text-sm text-primary font-medium">{pub.venue}</span>

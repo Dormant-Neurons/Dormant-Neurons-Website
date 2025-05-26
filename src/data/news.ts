@@ -2,13 +2,15 @@ export interface News {
     title: string;
     description: string;
     date: Date;
+    link?: string;
 }
 
 export const news: News[] = [
     {
         title: "Paper accepted at DIMVA",
-        description: "Our <a href=\"https://eisenhofer.me/data/beste-25-exploring.pdf\">paper</a>  \"Exploring the Potential of LLMs for Code Deobfuscation\" has been accepted for DIMVA 2025.",
-        date: new Date("2025-05-19")
+        description: "Our paper \"Exploring the Potential of LLMs for Code Deobfuscation\" has been accepted for DIMVA 2025.",
+        date: new Date("2025-05-19"),
+        link: "https://eisenhofer.me/data/beste-25-exploring.pdf"
     },
     {
         title: "Our Website is Live",

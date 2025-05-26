@@ -2,6 +2,7 @@ import Layout from '@/components/Layout';
 import JoinTeamButton from '@/components/JoinTeamButton';
 import { Card, CardContent } from '@/components/ui/card';
 import { news } from '@/data/news';
+import { Link } from 'react-router-dom';
 
 const News = () => {
   const formatDate = (date: Date) => {
@@ -42,9 +43,17 @@ const News = () => {
                       {formatDate(item.date)}
                     </span>
                   </div>
-                  <h3 className="text-xl font-semibold text-secondary mb-2">
-                    {item.title}
-                  </h3>
+                  {item.link ? (
+                    <Link to={item.link} target="_blank" rel="noopener noreferrer">
+                      <h3 className="text-xl font-semibold text-secondary mb-2 hover:text-primary transition-colors">
+                        {item.title}
+                      </h3>
+                    </Link>
+                  ) : (
+                    <h3 className="text-xl font-semibold text-secondary mb-2">
+                      {item.title}
+                    </h3>
+                  )}
                   <div 
                     className="text-gray-600"
                     dangerouslySetInnerHTML={{ __html: item.description }}

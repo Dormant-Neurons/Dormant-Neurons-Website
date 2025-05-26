@@ -67,8 +67,8 @@ const Publication = () => {
           <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="mb-8">
-              <div className="flex items-center space-x-4 mb-6">
-                <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+              <div className="flex flex-wrap items-center gap-2 mb-6">
+                <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full whitespace-nowrap">
                   {formatDate(publication.date)}
                 </span>
                 <span className="text-sm text-primary font-medium">{publication.venue}</span>
