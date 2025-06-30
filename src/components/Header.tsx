@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -14,6 +13,7 @@ const Header = () => {
     { name: 'News', href: '/news' },
     { name: 'Team', href: '/team' },
     { name: 'Publications', href: '/publications' },
+    { name: 'Gallery', href: '/gallery' },
     { name: 'Contact', href: '/contact' },
   ];
 

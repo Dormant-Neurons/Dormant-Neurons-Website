@@ -161,7 +161,7 @@ export const teamMembers: TeamMember[] = [
   {
     name: "Srishti Gupta",
     position: "Intern",
-    coAdvised: "From: Univeristy",
+    coAdvised: "From: Univeristy of Cagliari",
     image: "team/srishti-gupta.jpg",
     slug: "srishti-gupta",
     email: "srishti.gupta@uniroma1.it",

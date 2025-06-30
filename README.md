@@ -107,6 +107,15 @@ export interface ResearchArea {
 }
 ```
 
+### Gallery Photos (`gallery.ts`)
+```typescript
+export interface GalleryPhoto {
+  path: string;
+  description: string;
+  date: Date;
+}
+```
+
 ## 🎨 Styling
 
 The project uses Tailwind CSS for styling. Key variables are defined in `tailwind.config.js`

@@ -10,6 +10,7 @@ import { teamMembers } from '@/data/teamMembers';
 import { news } from '@/data/news';
 import { researchAreas } from '@/data/researchAreas';
 import { publications } from '@/data/publications';
+import { galleryPhotos } from '@/data/gallery';
 
 const Index = () => {
   const [copiedBibtex, setCopiedBibtex] = useState<string | null>(null);
@@ -34,6 +35,11 @@ const Index = () => {
 
   // Get the 3 most recent news items
   const latestNews = [...news]
+    .sort((a, b) => b.date.getTime() - a.date.getTime())
+    .slice(0, 3);
+
+  // Get the 3 most recent photos
+  const latestPhotos = [...galleryPhotos]
     .sort((a, b) => b.date.getTime() - a.date.getTime())
     .slice(0, 3);
 
@@ -183,6 +189,8 @@ const Index = () => {
         </div>
       </section>
 
+      
+
       {/* Meet the Team */}
       <section className="section-gradient py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -263,6 +271,42 @@ const Index = () => {
                       </Button>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Latest Photos */}
+      <section className="section-gradient py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-secondary">Latest Photos</h2>
+            <Link to="/gallery">
+              <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
+                See More
+              </Button>
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {latestPhotos.map((photo) => (
+              <Card key={photo.path} className="group hover:shadow-lg transition-all duration-300 hover:scale-105">
+                <div className="aspect-video overflow-hidden rounded-t-lg">
+                  <img
+                    src={photo.path}
+                    alt={photo.description}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-4 mb-2">
+                    <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                      {formatDate(photo.date)}
+                    </span>
+                  </div>
+                  <p className="text-gray-600 text-sm">{photo.description}</p>
                 </CardContent>
               </Card>
             ))}
