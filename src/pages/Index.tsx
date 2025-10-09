@@ -187,6 +187,11 @@ const Index = () => {
                 Our home is the <a href="https://cispa.de/en" target="_blank" rel="noopener noreferrer" className="text-primary-foreground italic hover:underline">CISPA Helmholtz Center for Information Security</a> in Saarbrücken, Germany
               </p>
               
+              <img
+                src="/logo/cispa-logo.png"
+                alt="CISPA Helmholtz Center for Information Security"
+                className="h-6 md:h-8 w-auto mb-4 opacity-90"
+              />
               <Button 
                 onClick={scrollToContent} 
                 variant="outline" 
