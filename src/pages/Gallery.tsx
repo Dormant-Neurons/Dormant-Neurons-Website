@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import Layout from '@/components/Layout';
-import { galleryPhotos, GalleryPhoto } from '@/data/gallery';
+import type { GalleryPhoto } from '@/data/gallery';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { db } from '@/firebase/config';
 
 const Gallery = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryPhoto | null>(null);
@@ -14,8 +16,35 @@ const Gallery = () => {
     });
   };
 
-  // Sort photos in reverse chronological order
-  const sortedPhotos = [...galleryPhotos].sort((a, b) => b.date.getTime() - a.date.getTime());
+  const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPhotos = async () => {
+      try {
+        const col = collection(db, 'gallery');
+        const q = query(col, orderBy('date', 'desc'));
+        const snapshot = await getDocs(q);
+        const data = snapshot.docs.map((doc) => {
+          const raw = doc.data() as any;
+          return {
+            path: raw.path,
+            description: raw.description,
+            date: raw.date?.toDate ? raw.date.toDate() : new Date(raw.date),
+          } as GalleryPhoto;
+        });
+        setPhotos(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching gallery:', err);
+        setError('Failed to load gallery');
+        setLoading(false);
+      }
+    };
+
+    fetchPhotos();
+  }, []);
 
   return (
     <Layout>
@@ -33,7 +62,17 @@ const Gallery = () => {
 
           {/* Gallery Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sortedPhotos.map((photo) => (
+            {loading && (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-600">Loading photos...</p>
+              </div>
+            )}
+            {error && (
+              <div className="col-span-full text-center py-12">
+                <p className="text-red-600">{error}</p>
+              </div>
+            )}
+            {photos.map((photo) => (
               <Card 
                 key={photo.path} 
                 className="group hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer"

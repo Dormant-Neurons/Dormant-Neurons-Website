@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '@/firebase/config';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
 
   const navigation = [
@@ -18,6 +21,13 @@ const Header = () => {
   ];
 
   const isActive = (href: string) => location.pathname === href;
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setIsAuthenticated(!!user);
+    });
+    return () => unsub();
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
@@ -51,6 +61,16 @@ const Header = () => {
                 {item.name}
               </Link>
             ))}
+            <Link
+              to={isAuthenticated ? '/dashboard' : '/login'}
+              className={`px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                isActive(isAuthenticated ? '/dashboard' : '/login')
+                  ? 'text-primary border-b-2 border-primary'
+                  : 'text-gray-700 hover:text-primary'
+              }`}
+            >
+              {isAuthenticated ? 'My Dashboard' : 'Login'}
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -82,6 +102,17 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
+              <Link
+                to={isAuthenticated ? '/dashboard' : '/login'}
+                className={`px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                  isActive(isAuthenticated ? '/dashboard' : '/login')
+                    ? 'text-primary bg-primary/10'
+                    : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {isAuthenticated ? 'My Dashboard' : 'Login'}
+              </Link>
             </div>
           </div>
         )}

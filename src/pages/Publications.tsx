@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Copy, ExternalLink, Search } from 'lucide-react';
 import Layout from '@/components/Layout';
@@ -6,7 +6,9 @@ import JoinTeamButton from '@/components/JoinTeamButton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { publications } from '@/data/publications';
+import type { Publication as PublicationItem } from '@/data/publications';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { db } from '@/firebase/config';
 
 const formatDate = (date: Date) => {
   return date.toLocaleDateString('en-US', {
@@ -19,8 +21,45 @@ const formatDate = (date: Date) => {
 const Publications = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [copiedBibtex, setCopiedBibtex] = useState<string | null>(null);
+  const [items, setItems] = useState<PublicationItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const filteredPublications = publications
+  useEffect(() => {
+    const fetchPublications = async () => {
+      try {
+        const col = collection(db, 'publications');
+        const q = query(col, orderBy('date', 'desc'));
+        const snapshot = await getDocs(q);
+        const data = snapshot.docs.map((doc) => {
+          const raw = doc.data() as any;
+          return {
+            title: raw.title,
+            slug: raw.slug,
+            authors: raw.authors,
+            shortAuthors: raw.shortAuthors,
+            venue: raw.venue,
+            date: raw.date?.toDate ? raw.date.toDate() : new Date(raw.date),
+            paperLink: raw.paperLink,
+            codeLink: raw.codeLink,
+            demoLink: raw.demoLink,
+            bibtex: raw.bibtex,
+            abstract: raw.abstract,
+          } as PublicationItem;
+        });
+        setItems(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching publications:', err);
+        setError('Failed to load publications');
+        setLoading(false);
+      }
+    };
+
+    fetchPublications();
+  }, []);
+
+  const filteredPublications = items
     .filter(pub =>
       pub.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       pub.authors.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -40,6 +79,16 @@ const Publications = () => {
       
       <div className="py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {loading && (
+            <div className="text-center py-20">
+              <p className="text-xl text-gray-600">Loading publications...</p>
+            </div>
+          )}
+          {error && (
+            <div className="text-center py-20">
+              <p className="text-xl text-red-600">{error}</p>
+            </div>
+          )}
           {/* Header */}
           <div className="mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">

@@ -1,19 +1,138 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDown, ChevronDown, Copy, ExternalLink } from 'lucide-react';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { db } from '@/firebase/config';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Layout from '@/components/Layout';
 import JoinTeamButton from '@/components/JoinTeamButton';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { teamMembers } from '@/data/teamMembers';
-import { news } from '@/data/news';
+import { TeamMember } from '@/data/teamMembers';
+import type { News as NewsItem } from '@/data/news';
 import { researchAreas } from '@/data/researchAreas';
-import { publications } from '@/data/publications';
-import { galleryPhotos } from '@/data/gallery';
+import type { Publication as PublicationItem } from '@/data/publications';
+import type { GalleryPhoto } from '@/data/gallery';
 
 const Index = () => {
   const [copiedBibtex, setCopiedBibtex] = useState<string | null>(null);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [loadingTeam, setLoadingTeam] = useState(true);
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+  const [loadingNews, setLoadingNews] = useState(true);
+  const [pubItems, setPubItems] = useState<PublicationItem[]>([]);
+  const [loadingPubs, setLoadingPubs] = useState(true);
+  const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
+  const [loadingPhotos, setLoadingPhotos] = useState(true);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const membersCollection = collection(db, 'members');
+        const q = query(membersCollection, orderBy('order', 'asc'));
+        const membersSnapshot = await getDocs(q);
+        
+        console.log('Firebase query result:', membersSnapshot.docs.length, 'documents found');
+        
+        const membersList = membersSnapshot.docs.map(doc => ({
+          ...doc.data(),
+          id: doc.id
+        })) as unknown as TeamMember[];
+        
+        setTeamMembers(membersList);
+        setLoadingTeam(false);
+      } catch (err) {
+        console.error('Error fetching team members:', err);
+        setLoadingTeam(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const newsCol = collection(db, 'news');
+        const q = query(newsCol, orderBy('date', 'desc'));
+        const snapshot = await getDocs(q);
+        const data = snapshot.docs.map((doc) => {
+          const raw = doc.data() as any;
+          return {
+            title: raw.title,
+            description: raw.description,
+            date: raw.date?.toDate ? raw.date.toDate() : new Date(raw.date),
+            link: raw.link || undefined,
+          } as NewsItem;
+        });
+        setNewsItems(data);
+        setLoadingNews(false);
+      } catch (err) {
+        console.error('Error fetching news:', err);
+        setLoadingNews(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  useEffect(() => {
+    const fetchPublications = async () => {
+      try {
+        const col = collection(db, 'publications');
+        const q = query(col, orderBy('date', 'desc'));
+        const snapshot = await getDocs(q);
+        const data = snapshot.docs.map((doc) => {
+          const raw = doc.data() as any;
+          return {
+            title: raw.title,
+            slug: raw.slug,
+            authors: raw.authors,
+            shortAuthors: raw.shortAuthors,
+            venue: raw.venue,
+            date: raw.date?.toDate ? raw.date.toDate() : new Date(raw.date),
+            paperLink: raw.paperLink,
+            codeLink: raw.codeLink,
+            demoLink: raw.demoLink,
+            bibtex: raw.bibtex,
+            abstract: raw.abstract,
+          } as PublicationItem;
+        });
+        setPubItems(data);
+        setLoadingPubs(false);
+      } catch (err) {
+        console.error('Error fetching publications:', err);
+        setLoadingPubs(false);
+      }
+    };
+
+    fetchPublications();
+  }, []);
+
+  useEffect(() => {
+    const fetchPhotos = async () => {
+      try {
+        const col = collection(db, 'gallery');
+        const q = query(col, orderBy('date', 'desc'));
+        const snapshot = await getDocs(q);
+        const data = snapshot.docs.map((doc) => {
+          const raw = doc.data() as any;
+          return {
+            path: raw.path,
+            description: raw.description,
+            date: raw.date?.toDate ? raw.date.toDate() : new Date(raw.date),
+          } as GalleryPhoto;
+        });
+        setPhotos(data);
+        setLoadingPhotos(false);
+      } catch (err) {
+        console.error('Error fetching gallery:', err);
+        setLoadingPhotos(false);
+      }
+    };
+
+    fetchPhotos();
+  }, []);
 
   const copyBibtex = (bibtex: string, title: string) => {
     navigator.clipboard.writeText(bibtex);
@@ -33,15 +152,11 @@ const Index = () => {
     });
   };
 
-  // Get the 3 most recent news items
-  const latestNews = [...news]
-    .sort((a, b) => b.date.getTime() - a.date.getTime())
-    .slice(0, 3);
+  // Get the 3 most recent news items from Firestore
+  const latestNews = newsItems.slice(0, 3);
 
   // Get the 3 most recent photos
-  const latestPhotos = [...galleryPhotos]
-    .sort((a, b) => b.date.getTime() - a.date.getTime())
-    .slice(0, 3);
+  const latestPhotos = photos.slice(0, 3);
 
   return (
     <Layout>
@@ -92,7 +207,7 @@ const Index = () => {
                 />
               </div>
               <p className="text-white italic text-sm mt-4 text-center">
-                Dormant Neurons as last seen in June 2024
+                Dormant Neurons as last seen in October 2025
               </p>
             </div>
           </div>
@@ -155,7 +270,11 @@ const Index = () => {
           </div>
           
           <div className="space-y-6">
-            {latestNews.map((item, index) => (
+            {loadingNews ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">Loading news...</p>
+              </div>
+            ) : latestNews.map((item, index) => (
               <Card key={index} className="hover:shadow-md transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex flex-col md:flex-row md:items-center justify-between">
@@ -199,23 +318,29 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
-            {teamMembers.map((member, index) => (
-              <Link key={index} to={`/team/${member.slug}`} className="group">
-                <div className="flex flex-col items-center text-center">
-                  <Avatar className="w-32 h-32 border-2 border-primary/20 group-hover:border-primary transition-all duration-300 mb-4">
-                    <AvatarImage src={member.image} alt={member.name} />
-                    <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                  </Avatar>
-                  <h3 className="font-medium text-secondary group-hover:text-primary transition-colors text-sm sm:text-base">
-                    {member.name}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-gray-600 mt-1">{member.position}</p>
-                  {member.coAdvised && (
-                    <p className="text-xs text-gray-500 mt-1">{member.coAdvised}</p>
-                  )}
-                </div>
-              </Link>
-            ))}
+            {loadingTeam ? (
+              <div className="col-span-full text-center py-8">
+                <p className="text-gray-600">Loading team members...</p>
+              </div>
+            ) : (
+              teamMembers.map((member, index) => (
+                <Link key={index} to={`/team/${member.slug}`} className="group">
+                  <div className="flex flex-col items-center text-center">
+                    <Avatar className="w-32 h-32 border-2 border-primary/20 group-hover:border-primary transition-all duration-300 mb-4">
+                      <AvatarImage src={member.image} alt={member.name} />
+                      <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <h3 className="font-medium text-secondary group-hover:text-primary transition-colors text-sm sm:text-base">
+                      {member.name}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-600 mt-1">{member.position}</p>
+                    {member.additionalInfo && (
+                      <p className="text-xs text-gray-500 mt-1">{member.additionalInfo}</p>
+                    )}
+                  </div>
+                </Link>
+              ))
+            )}
           </div>
         </div>
       </section>
@@ -233,10 +358,7 @@ const Index = () => {
           </div>
           
           <div className="space-y-6">
-            {[...publications]
-              .sort((a, b) => b.date.getTime() - a.date.getTime())
-              .slice(0, 3)
-              .map((pub, index) => (
+            {(loadingPubs ? [] : pubItems.slice(0, 3)).map((pub, index) => (
               <Card key={index} className="hover:shadow-md transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between">
@@ -291,7 +413,11 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {latestPhotos.map((photo) => (
+            {loadingPhotos ? (
+              <div className="col-span-full text-center py-8">
+                <p className="text-gray-600">Loading photos...</p>
+              </div>
+            ) : latestPhotos.map((photo) => (
               <Card key={photo.path} className="group hover:shadow-lg transition-all duration-300 hover:scale-105">
                 <div className="aspect-video overflow-hidden rounded-t-lg">
                   <img

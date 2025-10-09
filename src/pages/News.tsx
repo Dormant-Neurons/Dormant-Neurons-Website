@@ -1,10 +1,43 @@
+import { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import JoinTeamButton from '@/components/JoinTeamButton';
 import { Card, CardContent } from '@/components/ui/card';
-import { news } from '@/data/news';
 import { Link } from 'react-router-dom';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { db } from '@/firebase/config';
+import type { News as NewsItem } from '@/data/news';
 
 const News = () => {
+  const [items, setItems] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const newsCol = collection(db, 'news');
+        const q = query(newsCol, orderBy('date', 'desc'));
+        const snapshot = await getDocs(q);
+        const data = snapshot.docs.map((doc) => {
+          const raw = doc.data() as any;
+          return {
+            title: raw.title,
+            description: raw.description,
+            date: raw.date?.toDate ? raw.date.toDate() : new Date(raw.date),
+            link: raw.link || undefined,
+          } as NewsItem;
+        });
+        setItems(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching news:', err);
+        setError('Failed to load news');
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
@@ -13,8 +46,33 @@ const News = () => {
     });
   };
 
-  // Sort news items by date in reverse chronological order
-  const sortedNews = [...news].sort((a, b) => b.date.getTime() - a.date.getTime());
+  if (loading) {
+    return (
+      <Layout>
+        <div className="py-12">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center py-20">
+              <p className="text-xl text-gray-600">Loading news...</p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <div className="py-12">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center py-20">
+              <p className="text-xl text-red-600">{error}</p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -35,7 +93,7 @@ const News = () => {
 
           {/* News Items */}
           <div className="mx-auto space-y-8">
-            {sortedNews.map((item, index) => (
+            {items.map((item, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4 mb-2">

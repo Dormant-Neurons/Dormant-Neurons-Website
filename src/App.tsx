@@ -14,6 +14,19 @@ import Publication from "./pages/Publication";
 import Contact from "./pages/Contact";
 import Gallery from "./pages/Gallery";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import EditProfile from "./pages/EditProfile";
+import ProtectedRoute from "./components/ProtectedRoute";
+import MemberDashboard from "./pages/MemberDashboard";
+import AddNews from "./pages/AddNews";
+import AddPublication from "./pages/AddPublication";
+import AddGallery from "./pages/AddGallery";
+import AddMember from "./pages/admin/AddMember";
+import ReorderMembers from "./pages/admin/ReorderMembers";
+import EditNews from "./pages/admin/EditNews";
+import EditMembers from "./pages/admin/EditMembers";
+import EditPublications from "./pages/admin/EditPublications";
+import EditGallery from "./pages/admin/EditGallery";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +72,95 @@ const App = () => (
           <Route path="/publications/:slug" element={<Publication />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+          <Route 
+            path="/edit-profile" 
+            element={
+              <ProtectedRoute>
+                <EditProfile />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <MemberDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/add-news" 
+            element={
+              <ProtectedRoute>
+                <AddNews />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/add-publication" 
+            element={
+              <ProtectedRoute>
+                <AddPublication />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/add-gallery" 
+            element={
+              <ProtectedRoute>
+                <AddGallery />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/add-member" 
+            element={
+              <ProtectedRoute>
+                <AddMember />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/reorder-members" 
+            element={
+              <ProtectedRoute>
+                <ReorderMembers />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/edit-news" 
+            element={
+              <ProtectedRoute>
+                <EditNews />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/edit-members" 
+            element={
+              <ProtectedRoute>
+                <EditMembers />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/edit-publications" 
+            element={
+              <ProtectedRoute>
+                <EditPublications />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/edit-gallery" 
+            element={
+              <ProtectedRoute>
+                <EditGallery />
+              </ProtectedRoute>
+            } 
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

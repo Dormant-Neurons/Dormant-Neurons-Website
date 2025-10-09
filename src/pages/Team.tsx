@@ -1,10 +1,71 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { db } from '@/firebase/config';
 import Layout from '@/components/Layout';
 import JoinTeamButton from '@/components/JoinTeamButton';
 import { Card, CardContent } from '@/components/ui/card';
-import { teamMembers } from '@/data/teamMembers';
+import { TeamMember } from '@/data/teamMembers'; // Import your existing interface
 
 const Team = () => {
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const membersCollection = collection(db, 'members');
+        const q = query(membersCollection, orderBy('order', 'asc'));
+        const membersSnapshot = await getDocs(q);
+        
+        console.log('Firebase query result:', membersSnapshot.docs.length, 'documents found');
+        
+        const membersList = membersSnapshot.docs.map(doc => ({
+          ...doc.data(),
+          id: doc.id
+        })) as unknown as TeamMember[];
+        
+        setTeamMembers(membersList);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching team members:', err);
+        setError('Failed to load team members');
+        setLoading(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="py-12">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center py-20">
+              <p className="text-xl text-gray-600">Loading team members...</p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <div className="py-12">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center py-20">
+              <p className="text-xl text-red-600">{error}</p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <JoinTeamButton />
@@ -37,10 +98,9 @@ const Team = () => {
                     </div>
                     <h3 className="text-xl font-semibold text-secondary mb-2">{member.name}</h3>
                     <p className="text-primary font-medium mb-2">{member.position}</p>
-                    {member.coAdvised && (
-                      <p className="text-sm text-gray-500 mb-4">{member.coAdvised}</p>
+                    {member.additionalInfo && (
+                      <p className="text-sm text-gray-500 mb-4">{member.additionalInfo}</p>
                     )}
-                    {/* <p className="text-gray-600 text-sm leading-relaxed">{member.bio}</p> */}
                   </CardContent>
                 </Card>
               </Link>

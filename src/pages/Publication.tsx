@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Copy, ExternalLink } from 'lucide-react';
 import Layout from '@/components/Layout';
@@ -5,8 +6,9 @@ import JoinTeamButton from '@/components/JoinTeamButton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useState } from 'react';
-import { publications } from '@/data/publications';
+import { collection, getDocs, query, where, limit } from 'firebase/firestore';
+import { db } from '@/firebase/config';
+import type { Publication as PublicationItem } from '@/data/publications';
 
 const formatDate = (date: Date) => {
   return date.toLocaleDateString('en-US', {
@@ -19,8 +21,45 @@ const formatDate = (date: Date) => {
 const Publication = () => {
   const { slug } = useParams();
   const [copiedBibtex, setCopiedBibtex] = useState<string | null>(null);
+  const [publication, setPublication] = useState<PublicationItem | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const publication = publications.find(pub => pub.slug === slug);
+  useEffect(() => {
+    const fetchPublication = async () => {
+      try {
+        const col = collection(db, 'publications');
+        const q = query(col, where('slug', '==', slug), limit(1));
+        const snapshot = await getDocs(q);
+        if (snapshot.empty) {
+          setPublication(null);
+        } else {
+          const raw = snapshot.docs[0].data() as any;
+          const item: PublicationItem = {
+            title: raw.title,
+            slug: raw.slug,
+            authors: raw.authors,
+            shortAuthors: raw.shortAuthors,
+            venue: raw.venue,
+            date: raw.date?.toDate ? raw.date.toDate() : new Date(raw.date),
+            paperLink: raw.paperLink,
+            codeLink: raw.codeLink,
+            demoLink: raw.demoLink,
+            bibtex: raw.bibtex,
+            abstract: raw.abstract,
+          };
+          setPublication(item);
+        }
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching publication:', err);
+        setError('Failed to load publication');
+        setLoading(false);
+      }
+    };
+
+    fetchPublication();
+  }, [slug]);
 
   const copyBibtex = () => {
     if (publication) {
@@ -30,12 +69,24 @@ const Publication = () => {
     }
   };
 
-  if (!publication) {
+  if (loading) {
     return (
       <Layout>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-secondary mb-4">Publication not found</h1>
+            <h1 className="text-2xl font-bold text-secondary mb-4">Loading publication...</h1>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !publication) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-secondary mb-4">{error || 'Publication not found'}</h1>
             <Link to="/publications">
               <Button variant="outline">
                 <ArrowLeft className="h-4 w-4 mr-2" />
