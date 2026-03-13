@@ -117,7 +117,7 @@ const Login = () => {
               <div className="text-center text-sm text-gray-600 mt-4">
                 <p>Forgot your password?</p>
                 <a
-                  href="https://console.firebase.google.com"
+                  href=""
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary hover:underline"
